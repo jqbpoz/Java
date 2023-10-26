@@ -6,7 +6,7 @@ import java.util.Set;
 public class Main {
     public static void main(String[] args) {
         List<Integer> list1 = Arrays.asList(1, 2, 4);
-        Set<Integer> set1 = new HashSet<>(list1); // bład dla 3 , 6 ,6
+        Set<Integer> set1 = new HashSet<>(list1);
         KostkaDoGry kostkaRef = new PrawdziwaKostka();
         Eksperymentator ref = new WspanialyEksperymentator();
         ref.użyjKostki(kostkaRef);
