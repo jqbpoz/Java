@@ -32,7 +32,6 @@ public class WspanialyEksperymentator implements Eksperymentator{
                 key+=kostka.rzut();
             }
             mapa.put(key,mapa.get(key)+1);
-//            System.out.println(mapa.toString());
             omega+=1;
             long obecnyCzas = System.currentTimeMillis();
             if (obecnyCzas - czasRozpoczecia >= this.czasEksperymentu) {
@@ -41,7 +40,6 @@ public class WspanialyEksperymentator implements Eksperymentator{
                 break;
             }
         }
-//        System.out.println(mapa.toString());
         return mapa;
     }
 
