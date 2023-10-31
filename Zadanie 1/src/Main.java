@@ -40,6 +40,7 @@ public class Main {
         display(calc1);
     }
 
+
     public static void display(Calculator calc) {
         System.out.println("ACC: " + calc.acc);
         System.out.println(Arrays.toString(calc.memory));
