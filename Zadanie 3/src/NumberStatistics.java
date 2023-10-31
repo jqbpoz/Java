@@ -6,7 +6,6 @@ public class NumberStatistics implements Statistics {
     int lenght;
     Map<Integer, Set<Position>> map;
 
-    //Funtion return squareDistance beetween two position based on periodic conditions
     public int squareDistance(Position position, Position posToCompare) {
         int xDistance = Math.abs(position.col() - posToCompare.col());
         int yDistance = Math.abs(position.row() - posToCompare.row());
@@ -23,14 +22,14 @@ public class NumberStatistics implements Statistics {
         return xDistance * xDistance + yDistance * yDistance;
     }
 
-    public static void addValueMapToMainMap(Map<Integer, Map<Integer, Integer>> mainMap, int key, Map<Integer, Integer> valueMap) {
-        if (!mainMap.containsKey(key)) {
-            mainMap.put(key, new HashMap<>());
+    public static void mainMapPutter(Map<Integer, Map<Integer, Integer>> mainMap, int mainMapKey, Map<Integer, Integer> counterMap) {
+        if (!mainMap.containsKey(mainMapKey)) {
+            mainMap.put(mainMapKey, new HashMap<>());
         }
-        mainMap.put(key, valueMap);
+        mainMap.put(mainMapKey, counterMap);
     }
 
-    public static void valueMapPutter(Map<Integer, Integer> temporaryMap, int distanceKey) {
+    public static void counterMapPutter(Map<Integer, Integer> temporaryMap, int distanceKey) {
         if (!temporaryMap.containsKey(distanceKey)) {
             temporaryMap.put(distanceKey, 1);
         } else {
@@ -52,20 +51,21 @@ public class NumberStatistics implements Statistics {
     @Override
     public Map<Integer, Map<Integer, Integer>> neighbours(Position position, int maxDistanceSquared) {
         Map<Integer, Map<Integer, Integer>> neighboursMap = new HashMap<>();
-        // key=squere , value=howMuch
         for (Map.Entry<Integer, Set<Position>> entry : this.map.entrySet()) {
-            int mainKey = entry.getKey();
-            Map<Integer, Integer> valueMap = new HashMap<>();
+            int mainMapKey = entry.getKey();
+            Map<Integer, Integer> counterMap = new HashMap<>();
             Set<Position> positions = entry.getValue();
             for (Position posToCompare : positions) {
                 int distanceKey = squareDistance(position, posToCompare);
                 System.out.println(distanceKey);
                 if (distanceKey <= maxDistanceSquared && distanceKey > 0) {
-                    valueMapPutter(valueMap, distanceKey);
-                    System.out.println(valueMap);
+                    counterMapPutter(counterMap, distanceKey);
+                    System.out.println(counterMap);
                 }
             }
-            addValueMapToMainMap(neighboursMap, mainKey, valueMap);
+            if (!counterMap.isEmpty()) {
+                mainMapPutter(neighboursMap, mainMapKey, counterMap);
+            }
         }
         System.out.println(neighboursMap);
         return neighboursMap;
