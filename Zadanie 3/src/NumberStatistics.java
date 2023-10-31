@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class NumberStatistics implements Statistics {
     int lenght;
-    Map<Integer, Set<Position>> map;
+    Map<Integer, Set<Position>> numberPositions;
 
     public int squareDistance(Position position, Position posToCompare) {
         int xDistance = Math.abs(position.col() - posToCompare.col());
@@ -15,10 +15,6 @@ public class NumberStatistics implements Statistics {
         if ((yDistance > (this.lenght / 2))) {
             yDistance = this.lenght - yDistance;
         }
-        System.out.println(position);
-        System.out.println(posToCompare);
-        System.out.println(position.col() + " " + posToCompare.col() + " " + xDistance);
-        System.out.println(position.row() + " " + posToCompare.row() + " " + yDistance);
         return xDistance * xDistance + yDistance * yDistance;
     }
 
@@ -45,29 +41,26 @@ public class NumberStatistics implements Statistics {
 
     @Override
     public void addNumbers(Map<Integer, Set<Position>> numberPositions) {
-        this.map = numberPositions;
+        this.numberPositions = numberPositions;
     }
 
     @Override
     public Map<Integer, Map<Integer, Integer>> neighbours(Position position, int maxDistanceSquared) {
         Map<Integer, Map<Integer, Integer>> neighboursMap = new HashMap<>();
-        for (Map.Entry<Integer, Set<Position>> entry : this.map.entrySet()) {
+        for (Map.Entry<Integer, Set<Position>> entry : this.numberPositions.entrySet()) {
             int mainMapKey = entry.getKey();
             Map<Integer, Integer> counterMap = new HashMap<>();
             Set<Position> positions = entry.getValue();
             for (Position posToCompare : positions) {
                 int distanceKey = squareDistance(position, posToCompare);
-                System.out.println(distanceKey);
                 if (distanceKey <= maxDistanceSquared && distanceKey > 0) {
                     counterMapPutter(counterMap, distanceKey);
-                    System.out.println(counterMap);
                 }
             }
             if (!counterMap.isEmpty()) {
                 mainMapPutter(neighboursMap, mainMapKey, counterMap);
             }
         }
-        System.out.println(neighboursMap);
         return neighboursMap;
     }
 }
