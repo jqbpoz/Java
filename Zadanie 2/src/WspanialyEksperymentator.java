@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class WspanialyEksperymentator implements Eksperymentator {
+class WspanialyEksperymentator implements Eksperymentator {
 
     KostkaDoGry kostka;
     long czasEksperymentu;

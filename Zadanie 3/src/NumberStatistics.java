@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class NumberStatistics implements Statistics {
+class NumberStatistics implements Statistics {
     int lenght;
     Map<Integer, Set<Position>> numberPositions;
 
