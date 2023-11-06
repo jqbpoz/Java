@@ -10,7 +10,7 @@ public class Main {
         KostkaDoGry kostkaRef = new PrawdziwaKostka();
         Eksperymentator ref = new WspanialyEksperymentator();
         ref.użyjKostki(kostkaRef);
-        ref.czasJednegoEksperymentu(200);
+        ref.czasJednegoEksperymentu(500);
         ref.szansaNaWyrzucenieOczek(2).forEach((klucz, wartosc) -> {
             System.out.println("Key: " + klucz + ", Value: " + wartosc);
         });

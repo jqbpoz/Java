@@ -52,13 +52,15 @@ class WspanialyEksperymentator implements Eksperymentator {
         long czasRozpoczecia = System.currentTimeMillis();
         while (true) {
             omega += 1;
+            int zdarzeniaSekwencja = 0;
             for (int i = 0; i < rozmiar; i++) {
-                if (sekwencja.get(i) == kostka.rzut()) {
-                    if (i == rozmiar - 1)
-                        zdarzenie += 1;
-                    continue;
+                int rzut = kostka.rzut();
+                if (rzut == sekwencja.get(i)) {
+                    zdarzeniaSekwencja++;
                 }
-                break;
+            }
+            if (zdarzeniaSekwencja == rozmiar) {
+                zdarzenie++;
             }
             long obecnyCzas = System.currentTimeMillis();
             if (obecnyCzas - czasRozpoczecia >= this.czasEksperymentu) {
