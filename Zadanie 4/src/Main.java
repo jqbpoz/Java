@@ -12,7 +12,5 @@ public class Main {
         Direction directionEast = Direction.EAST;
         Direction directionSouth = Direction.SOUTH;
         Direction directionWest = Direction.WEST;
-
-
     }
 }

@@ -1,13 +1,11 @@
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Queue;
-import java.util.LinkedList;
+import java.util.*;
 
-//Należy dbać zby blind pozycja wykonywała to co pozycja kontrolera
 public class Indiana implements Explorer {
     int moves;
     PlayerController controller;
-
+    List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    Position blindPosition = new Position(0, 0);
+    Set<Position> FireAndWallBlindSet = new HashSet<>();
 
     public Direction opositeTo(Direction direction) {
         switch (direction) {
@@ -45,12 +43,23 @@ public class Indiana implements Explorer {
         return direction;
     }
 
-    Position blindPosition = new Position(0, 0);
-
-    Set<Position> floodedBlindSet = new HashSet<>();
-    Set<Position> FireAndWallBlindSet = new HashSet<>();
-    Set<Position> whitePathSet = new HashSet<>();
-
+    public Direction toRight(Direction direction) {
+        switch (direction) {
+            case NORTH -> {
+                return Direction.EAST;
+            }
+            case EAST -> {
+                return Direction.SOUTH;
+            }
+            case SOUTH -> {
+                return Direction.WEST;
+            }
+            case WEST -> {
+                return Direction.NORTH;
+            }
+        }
+        return direction;
+    }
 
     @Override
     public void underwaterMovesAllowed(int moves) {
@@ -62,43 +71,60 @@ public class Indiana implements Explorer {
         this.controller = controller;
     }
 
-    @Override
-    public void findExit() {
-        boolean loop = true;
-        //kierunkami sterować będziemy w zaleności od potrzeby
 
-        Direction currentDirection = Direction.EAST;
-        Position futureBlindPosition = null;
-        while (loop) {
-            System.out.println("moja ślepa pozycja" + blindPosition);
-            System.out.println();
-            try {
-                futureBlindPosition = currentDirection.step(blindPosition);
-                if (FireAndWallBlindSet.contains(futureBlindPosition)) {
-                    //tutaj w takim przypadku zmienimy kierunek i spóbujemy jeszcze raz damy continue
-                    break; // tutaj nie wykonamy tego kroku bo napotkamy na ścianę
-                }
-                controller.move(currentDirection);
-            } catch (OnFire onFireException) {
-                currentDirection = opositeTo(currentDirection);
-                continue;
-            } catch (Flooded floodedException) {
-                continue;
-            } catch (Wall wallException) {
-                System.out.println("Gracz natrafił na ścianę! ");
-                FireAndWallBlindSet.add(futureBlindPosition);
-                System.out.println("Do zbioru ścian dodano:" + futureBlindPosition);
-                //nie zmieniamy
-                continue;
-            } catch (Exit exitException) {
-                System.out.println("Gracz znalazł wyjście! ");
-                loop = false;
+    public boolean seachPath(Position position, Set<Position> path) throws OnFire, Flooded, Wall, Exit {
+        Direction direction;
+        for (int i = 0; i < 4; i++) {
+            direction = directions.get(i);
+            System.out.println(direction);
+            Position nextstep = direction.step(position);
+            if (path.contains(nextstep) || FireAndWallBlindSet.contains(nextstep)) {
+                System.out.println("nie chcę się cofać");
                 continue;
             }
-            blindPosition = futureBlindPosition;
-            whitePathSet.add(blindPosition);
+            try {
+                controller.move(direction);
+            } catch (OnFire e) {
+                FireAndWallBlindSet.add(nextstep);
+                controller.move(opositeTo(direction));
+                path.remove(nextstep);
+                continue;
+            } catch (Flooded e) {
+//                path.remove(nextstep);
+                FireAndWallBlindSet.add(toRight(direction).step(nextstep));
+                FireAndWallBlindSet.add(toLeft(direction).step(nextstep));
+            } catch (Wall e) {
+                FireAndWallBlindSet.add(nextstep);
+                continue;
+            } catch (Exit e) {
+                return true;
+            }
+
+            path.add(position);
+            if (seachPath(nextstep, path)) {
+                return true;
+            }
+            controller.move(opositeTo(direction));
+            path.remove(nextstep);
 
         }
+        return false;
+    }
 
+    @Override
+    public void findExit() {
+        Set<Position> path = new HashSet<>();
+        path.add(blindPosition);
+        try {
+            seachPath(blindPosition, path);
+        } catch (OnFire e) {
+            throw new RuntimeException(e);
+        } catch (Flooded e) {
+            throw new RuntimeException(e);
+        } catch (Wall e) {
+            throw new RuntimeException(e);
+        } catch (Exit e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -3,11 +3,12 @@ import java.util.Set;
 
 
 public class Controller implements PlayerController {
-    Position currentPosition = new Position(4, 10);
+    Position currentPosition = new Position(2, 3);
     Set<Position> onFireSet = new HashSet<>();
     Set<Position> floodedSet = new HashSet<>();
     Set<Position> exitSet = new HashSet<>();
     Set<Position> wallSet = new HashSet<>();
+    Set<Position> repeated = new HashSet<>();
 
     public void setAll() {
         wallSet.add(new Position(1, 16));
@@ -30,7 +31,7 @@ public class Controller implements PlayerController {
         wallSet.add(new Position(18, 16));
         wallSet.add(new Position(1, 15));
         wallSet.add(new Position(2, 15));
-        wallSet.add(new Position(3, 15));
+        floodedSet.add(new Position(3, 15));
 //        wallSet.add(new Position(4, 15));
 //        wallSet.add(new Position(5, 15));
 //        wallSet.add(new Position(6, 15));
@@ -45,7 +46,7 @@ public class Controller implements PlayerController {
 //        wallSet.add(new Position(15, 15));
 //        wallSet.add(new Position(16, 15));
 //        wallSet.add(new Position(17, 15));
-        wallSet.add(new Position(18, 2));
+        wallSet.add(new Position(18, 15));
         wallSet.add(new Position(1, 14));
         wallSet.add(new Position(2, 14));
         wallSet.add(new Position(3, 14));
@@ -148,14 +149,14 @@ public class Controller implements PlayerController {
 //        wallSet.add(new Position(10, 9));
 //        wallSet.add(new Position(11, 9));
         wallSet.add(new Position(12, 9));
-        wallSet.add(new Position(13, 9));
+        onFireSet.add(new Position(13, 9));
 //        wallSet.add(new Position(14, 9));
         wallSet.add(new Position(15, 9));
 //        wallSet.add(new Position(16, 9));
         wallSet.add(new Position(17, 9));
         wallSet.add(new Position(18, 9));
         wallSet.add(new Position(1, 8));
-//        wallSet.add(new Position(2, 8));
+        floodedSet.add(new Position(2, 8));
         wallSet.add(new Position(3, 8));
 //        wallSet.add(new Position(4, 8));
 //        wallSet.add(new Position(5, 8));
@@ -166,14 +167,14 @@ public class Controller implements PlayerController {
 //        wallSet.add(new Position(10, 8));
 //        wallSet.add(new Position(11, 8));
         wallSet.add(new Position(12, 8));
-        wallSet.add(new Position(13, 8));
+        onFireSet.add(new Position(13, 8));
 //        wallSet.add(new Position(14, 8));
         wallSet.add(new Position(15, 8));
 //        wallSet.add(new Position(16, 8));
         wallSet.add(new Position(17, 8));
         wallSet.add(new Position(18, 8));
         wallSet.add(new Position(1, 7));
-//        wallSet.add(new Position(2, 7));
+        floodedSet.add(new Position(2, 7));
         wallSet.add(new Position(3, 7));
 //        wallSet.add(new Position(4, 7));
         wallSet.add(new Position(5, 7));
@@ -240,7 +241,7 @@ public class Controller implements PlayerController {
         wallSet.add(new Position(12, 4));
 //        wallSet.add(new Position(13, 4));
         wallSet.add(new Position(14, 4));
-        wallSet.add(new Position(15, 4));
+        onFireSet.add(new Position(15, 4));
         wallSet.add(new Position(16, 4));
         wallSet.add(new Position(17, 4));
         wallSet.add(new Position(1, 3));
@@ -278,8 +279,8 @@ public class Controller implements PlayerController {
 //        wallSet.add(new Position(15, 2));
 //        wallSet.add(new Position(16, 2));
 //        wallSet.add(new Position(17, 2));
-        wallSet.add(new Position(18, 15));
-        wallSet.add(new Position(1, 15));
+        wallSet.add(new Position(18, 2));
+        wallSet.add(new Position(1, 1));
         wallSet.add(new Position(2, 1));
         wallSet.add(new Position(3, 1));
         exitSet.add(new Position(4, 1));
@@ -302,8 +303,12 @@ public class Controller implements PlayerController {
 
     @Override
     public void move(Direction direction) throws OnFire, Flooded, Wall, Exit {
-        System.out.println("current pozycja" + currentPosition);
+//        System.out.println("current pozycja" + currentPosition);
         Position futurePosition = direction.step(currentPosition);
+        if (repeated.contains(futurePosition)) {
+            System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        }
+        System.out.println(currentPosition);
         if (onFireSet.contains(futurePosition)) {
             currentPosition = futurePosition;
             throw new OnFire();
@@ -311,17 +316,22 @@ public class Controller implements PlayerController {
         //
         if (floodedSet.contains(futurePosition)) {
             currentPosition = futurePosition;
+            System.out.println("WODAAAAAAAAAAAAAAAAAAAWODAAAAAAAAAAAAA");
             throw new Flooded();
         }
         if (exitSet.contains(futurePosition)) {
             currentPosition = futurePosition;
+            System.out.println("ZNALEZIONEEEEEEEEEEEEEEEEEEEEEEEEE!");
             throw new Exit();
         }
         //brak zmiany pozycji kontrolera
         if (wallSet.contains(futurePosition)) {
+            System.out.println("ściana!");
+            repeated.add(futurePosition);
             throw new Wall();
         }
+        System.out.println("ruszamy się!");
         currentPosition = futurePosition;
-        System.out.println("future pozycja" + futurePosition);
+//        System.out.println("future pozycja" + futurePosition);
     }
 }
