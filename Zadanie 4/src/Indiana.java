@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Indiana implements Explorer {
+class Indiana implements Explorer {
     int moves;
     PlayerController controller;
     List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
@@ -79,7 +79,6 @@ public class Indiana implements Explorer {
             System.out.println(direction);
             Position nextstep = direction.step(position);
             if (path.contains(nextstep) || FireAndWallBlindSet.contains(nextstep)) {
-                System.out.println("nie chcę się cofać");
                 continue;
             }
             try {
@@ -90,7 +89,6 @@ public class Indiana implements Explorer {
                 path.remove(nextstep);
                 continue;
             } catch (Flooded e) {
-//                path.remove(nextstep);
                 FireAndWallBlindSet.add(toRight(direction).step(nextstep));
                 FireAndWallBlindSet.add(toLeft(direction).step(nextstep));
             } catch (Wall e) {
@@ -99,14 +97,12 @@ public class Indiana implements Explorer {
             } catch (Exit e) {
                 return true;
             }
-
             path.add(position);
             if (seachPath(nextstep, path)) {
                 return true;
             }
             controller.move(opositeTo(direction));
             path.remove(nextstep);
-
         }
         return false;
     }
@@ -117,13 +113,7 @@ public class Indiana implements Explorer {
         path.add(blindPosition);
         try {
             seachPath(blindPosition, path);
-        } catch (OnFire e) {
-            throw new RuntimeException(e);
-        } catch (Flooded e) {
-            throw new RuntimeException(e);
-        } catch (Wall e) {
-            throw new RuntimeException(e);
-        } catch (Exit e) {
+        } catch (OnFire | Flooded | Wall | Exit e) {
             throw new RuntimeException(e);
         }
     }
