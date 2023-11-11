@@ -2,6 +2,8 @@ import java.util.*;
 
 class Indiana implements Explorer {
     int moves;
+    int oxygenReserve;
+    boolean oxygenGet;
     PlayerController controller;
     List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
     Position blindPosition = new Position(0, 0);
@@ -61,9 +63,14 @@ class Indiana implements Explorer {
         return direction;
     }
 
+    public void oxygenReset() {
+        this.oxygenReserve = this.moves;
+    }
+
     @Override
     public void underwaterMovesAllowed(int moves) {
         this.moves = moves;
+        oxygenReset();
     }
 
     @Override
@@ -76,7 +83,7 @@ class Indiana implements Explorer {
         Direction direction;
         for (int i = 0; i < 4; i++) {
             direction = directions.get(i);
-            System.out.println(direction);
+//            System.out.println(direction);
             Position nextstep = direction.step(position);
             if (path.contains(nextstep) || FireAndWallBlindSet.contains(nextstep)) {
                 continue;
@@ -84,11 +91,17 @@ class Indiana implements Explorer {
             try {
                 controller.move(direction);
             } catch (OnFire e) {
+                oxygenReset();
                 FireAndWallBlindSet.add(nextstep);
                 controller.move(opositeTo(direction));
                 path.remove(nextstep);
                 continue;
             } catch (Flooded e) {
+                oxygenReserve--;
+                oxygenGet = false;
+                if (oxygenReserve == Math.floor((double) moves / 2)) {
+                    FireAndWallBlindSet.add(direction.step(nextstep));
+                }
                 FireAndWallBlindSet.add(toRight(direction).step(nextstep));
                 FireAndWallBlindSet.add(toLeft(direction).step(nextstep));
             } catch (Wall e) {
@@ -97,11 +110,24 @@ class Indiana implements Explorer {
             } catch (Exit e) {
                 return true;
             }
+            if (oxygenGet) {
+                oxygenReset();
+            }
+            oxygenGet = true;
             path.add(position);
             if (seachPath(nextstep, path)) {
                 return true;
             }
-            controller.move(opositeTo(direction));
+            try {
+                controller.move(opositeTo(direction));
+            } catch (OnFire | Flooded | Wall e) {
+                path.remove(nextstep);
+                return false;
+            } catch (Exit e) {
+                path.remove(nextstep);
+                return true;
+            }
+            oxygenReset();
             path.remove(nextstep);
         }
         return false;
@@ -113,8 +139,7 @@ class Indiana implements Explorer {
         path.add(blindPosition);
         try {
             seachPath(blindPosition, path);
-        } catch (OnFire | Flooded | Wall | Exit e) {
-            throw new RuntimeException(e);
+        } catch (OnFire | Flooded | Wall | Exit ignored) {
         }
     }
 }
