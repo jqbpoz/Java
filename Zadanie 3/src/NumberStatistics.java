@@ -1,3 +1,5 @@
+//The class passed all the teacher's requirements
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
