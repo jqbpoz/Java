@@ -36,7 +36,7 @@ Kolejna kolumna na lewo od pierwszej to ostatnia. Podobnie z wierszami. Najproś
 płaszczyzny tak jak na obrazku poniżej. Obrazek pozwala także ustalić sąsiadów pól znajdujących się na rogach.</p>
 
 <center>
-<img src="pbc.png" width="90%"> 
+<img src="pbc.png" width="70%"> 
 </center>
 
 <h4>Zadanie</h4>
@@ -54,7 +54,7 @@ odległość A-B = sqrt( 5 ) = 2.236068
 
 <p>Przykład wyznaczania odległości:</p>
 
-<img src="distance.png" width="90%">
+<img src="distance.png" width="40%">
 
 <p>Licząc od liczby 4 mamy następujące kwadraty odległości (o ile się nie pomyliłem):</p>
 <ul>
@@ -71,7 +71,7 @@ odległość A-B = sqrt( 5 ) = 2.236068
 
 <p>Przykład wyniku</p>
 
-<img src="example.png" width="90%">
+<img src="example.png" width="40%">
 
 <p>Obliczenia prowadzimy względem pozycji oznaczonej czerwonym polem X. 
 Maksymalny kwadrat odległości to 8.</p>
