@@ -1,4 +1,4 @@
-<h3>Zadanie 1</h3><h4>Idea zadania</h4>
+<h3>Zadanie 2</h3><h4>Idea zadania</h4>
 
 <p>
 W zadaniu tym staramy się eksperymentalnie rozwiązać kilka zadań z zakresu rachunku prawdopodobieństwa.
