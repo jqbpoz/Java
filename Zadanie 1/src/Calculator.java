@@ -1,3 +1,5 @@
+//The program passed all the teacher's requirements
+
 import java.util.Arrays;
 
 class Calculator extends CalculatorOperations {
