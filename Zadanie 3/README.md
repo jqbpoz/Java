@@ -1,4 +1,4 @@
-<h3>Zadanie 3</h3><h4>Idea zadania</h4>
+<h3>Zadanie 3 </h3><h4>Idea zadania</h4>
 
 <p>
 Ponownie trzeba będzie zmierzyć się z kolekcjami. Zadanie polega
