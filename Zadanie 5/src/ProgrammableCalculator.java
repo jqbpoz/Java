@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,12 +8,15 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     private BufferedReader programCodeReader;
     private LineReader stdin;
     private LinePrinter stdout;
+    private int fakeNumberLine;
+    private Map<String, Integer> convertRealToFakeMap;
     private Map<Integer, String> programCodeMap;
     private Map<String, Integer> variablesMap;
 
     public ProgrammableCalculator() {
         programCodeMap = new HashMap<>();
         variablesMap = new HashMap<>();
+        convertRealToFakeMap = new HashMap<>();
     }
 
     @Override
@@ -35,7 +37,12 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     @Override
     public void run(int line) {
         loadProgramCode();
-        executeProgram(line);
+        this.fakeNumberLine = line;
+        while (programCodeMap.containsKey(this.fakeNumberLine)) {
+            String lineInstructionString = programCodeMap.get(this.fakeNumberLine);
+            processCodeLine(lineInstructionString);
+            this.fakeNumberLine++;
+        }
     }
 
     private void loadProgramCode() {
@@ -47,6 +54,7 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
                 if (line == null || line.trim().isEmpty()) {
                     break;
                 }
+                convertRealToFakeMap.put(line.split(" ")[0].trim(), lineNumber);
                 programCodeMap.put(lineNumber, line);
                 lineNumber++;
             }
@@ -55,12 +63,7 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     }
 
     private void executeProgram(int line) {
-        int lineKey = line;
-        while (programCodeMap.containsKey(lineKey)) {
-            String lineInstructionString = programCodeMap.get(lineKey);
-            processCodeLine(lineInstructionString);
-            lineKey++;
-        }
+
     }
 
 
@@ -100,7 +103,7 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
 
     private void usePrint(String expression) {
         if (expression.startsWith("\"") && expression.endsWith("\"")) {
-            stdout.printLine(expression.substring(1,expression.length()-1));
+            stdout.printLine(expression.substring(1, expression.length() - 1));
         } else {
             String output = evaluateExpression(expression) + "";
             stdout.printLine(output);
@@ -109,7 +112,7 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     }
 
     private void useGoto(String line) {
-        executeProgram(Integer.parseInt(line));
+        this.fakeNumberLine = convertRealToFakeMap.get(line) - 1;
     }
 
     private void useIf(String ifExpresion) {
@@ -190,5 +193,6 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
         return true;
     }
 }
+
 
 
