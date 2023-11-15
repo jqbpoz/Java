@@ -1,0 +1,15 @@
+190 LET a = 5
+195 lET b = 2
+200 LET a = a + 1
+210 LeT c = a * b
+212 PRINT a
+211 PriNt c
+213 let d = a / b
+214 Print d
+215 let d = a - b
+216 PRint d
+217 let d = a + b
+218 print d
+219 PRINT "STRING"
+220 eDd
+
