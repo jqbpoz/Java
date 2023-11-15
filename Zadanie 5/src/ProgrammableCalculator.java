@@ -67,40 +67,40 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     private void processCodeLine(String codeLine) {
         // codeLine ma postać "10 Let i = 3"
         String[] dividedCodeLine = codeLine.split(" ", 3);
-        //comand = "let"
+        //comand = "useLet"
         String command = dividedCodeLine[1].toUpperCase();
         //expresion = "i = 3" chyba że to to end;
         String expresion = (dividedCodeLine.length > 2) ? dividedCodeLine[2] : command;
 
         switch (command) {
             case "LET":
-                let(expresion);
+                useLet(expresion);
                 break;
             case "PRINT":
-                print(expresion);
+                usePrint(expresion);
                 break;
             case "GOTO":
-                gotoFunc(expresion);
+                useGoto(expresion);
                 break;
             case "END":
                 break;
             case "IF":
-                ifFunc(expresion);
+                useIf(expresion);
                 break;
             case "INPUT":
-                processInput(expresion);
+                useInput(expresion);
                 break;
         }
     }
 
-    private void let(String expression) {
+    private void useLet(String expression) {
         String[] parts = expression.split("=", 2);
         variablesMap.put(parts[0].trim().toUpperCase(), evaluateExpression(parts[1].trim()));
     }
 
-    private void print(String expression) {
+    private void usePrint(String expression) {
         if (expression.startsWith("\"") && expression.endsWith("\"")) {
-            stdout.printLine(expression);
+            stdout.printLine(expression.substring(1,expression.length()-1));
         } else {
             String output = evaluateExpression(expression) + "";
             stdout.printLine(output);
@@ -108,24 +108,22 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
 
     }
 
-    private void gotoFunc(String line) {
-        int targetLine = Integer.parseInt(line);
-        executeProgram(targetLine);
+    private void useGoto(String line) {
+        executeProgram(Integer.parseInt(line));
     }
 
-    private void ifFunc(String ifExpresion) {
+    private void useIf(String ifExpresion) {
         String[] parts = ifExpresion.split("(?i) goto ");
         String condition = parts[0];
         String newLine = parts[1];
         if (evaluateExpression(condition) == 1) {
-            gotoFunc(newLine);
+            useGoto(newLine);
         }
 
     }
 
-    private void processInput(String variableName) {
-        String inputLine = stdin.readLine();
-        int value = Integer.parseInt(inputLine.trim());
+    private void useInput(String variableName) {
+        int value = Integer.parseInt(stdin.readLine().trim());
         variablesMap.put(variableName.trim().toUpperCase(), value);
     }
 
