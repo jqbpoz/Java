@@ -37,31 +37,31 @@ public class Main {
 
             System.out.println("Program NR1 Sprawdzenie operacji");
             calculator1.programCodeReader(reader1);
-            calculator1.run(1);
+            calculator1.run(190);
             reader1.close();
             System.out.println("\nexpected:\n6\n12\n3\n4\n8\nSTRING\n");
 
             System.out.println("Program NR2 Inna numeracja linii");
             calculator2.programCodeReader(reader2);
-            calculator2.run(1);
+            calculator2.run(190);
             reader2.close();
             System.out.println("\nexpected:\n6\n12\n3\n4\n8\nSTRING\n");
 
             System.out.println("Program NR3 Goto bez IF");
             calculator3.programCodeReader(reader3);
-            calculator3.run(1);
+            calculator3.run(10);
             reader3.close();
             System.out.println("\nexpected:\nstart\nlinia 11 skok do 30\nskoczyłem z 12 do 30\n");
 
             System.out.println("Program NR4 Test Goto z IF");
             calculator4.programCodeReader(reader4);
-            calculator4.run(1);
+            calculator4.run(10);
             reader4.close();
             System.out.println("\nexpected:\na < b\nc > d\ne = f\na nie jest < od b\nc nie jest > od d\ne !=f\n");
 
             System.out.println("Program NR5");
             calculator5.programCodeReader(reader5);
-            calculator5.run(1);
+            calculator5.run(10);
             reader5.close();
 
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     @Override
     public void run(int line) {
         loadProgramCode();
-        this.fakeNumberLine = line;
+        this.fakeNumberLine = convertRealToFakeMap.get(line + "");
         while (programCodeMap.containsKey(this.fakeNumberLine)) {
             String lineInstructionString = programCodeMap.get(this.fakeNumberLine);
             processCodeLine(lineInstructionString);
