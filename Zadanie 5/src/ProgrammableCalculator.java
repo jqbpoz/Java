@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProgrammableCalculator implements ProgrammableCalculatorInterface {
+class ProgrammableCalculator implements ProgrammableCalculatorInterface {
 
     private BufferedReader programCodeReader;
     private LineReader stdin;
