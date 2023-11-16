@@ -14,7 +14,7 @@ również pola zalane wodą. Łatwo nie będzie...</p>
 
 <p>Przykładowy labirynt pokazano na obrazku poniżej.</p>
 
-<img src="./maze.png" width="70%">
+<img src="./maze.png" width="45%">
 
 <h4>Sterowanie</h4>
 
