@@ -5,7 +5,7 @@ class Indiana implements Explorer {
     int oxygenReserve;
     boolean oxygenGet;
     PlayerController controller;
-    List<Direction> directions = List.of(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
+    List<Direction> directions = List.of(Direction.EAST, Direction.NORTH, Direction.WEST, Direction.SOUTH);
     Position blindPosition = new Position(0, 0);
     Set<Position> FireAndWallBlindSet = new HashSet<>();
 
