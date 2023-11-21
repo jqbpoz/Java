@@ -16,13 +16,26 @@ public class Main {
             ProgrammableCalculator calculator4 = new ProgrammableCalculator();
             ProgrammableCalculator calculator5 = new ProgrammableCalculator();
 
+//            ProgrammableCalculatorInterface.LineReader lineReader = () -> {
+//                Scanner scanner = new Scanner(System.in);
+//                System.out.print("Podaj Int");
+//                String userInput = scanner.nextLine();
+//                scanner.close();
+//                return userInput;
+//            };
             ProgrammableCalculatorInterface.LineReader lineReader = () -> {
                 Scanner scanner = new Scanner(System.in);
-                System.out.print("Podaj Int");
-                String userInput = scanner.nextLine();
-                scanner.close();
+                System.out.print("Podaj Int: ");
+                String userInput = "";
+
+                if (scanner.hasNextLine()) {
+                    userInput = scanner.nextLine();
+                }
+
+//                scanner.close();
                 return userInput;
             };
+
             ProgrammableCalculatorInterface.LinePrinter linePrinter = System.out::println;
             calculator1.setStdout(linePrinter);
             calculator1.setStdin(lineReader);
