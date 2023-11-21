@@ -9,11 +9,12 @@ public class MyMadSet implements MadSet {
     List<Point> pointList = new ArrayList<>();
     List<Point> removedPoints = new ArrayList<>();
 
-    public boolean changeDetector() {
+    public boolean change() {
+        removedPoints.clear();
         List<Point> oldPointList = new ArrayList<>(pointList);
         for (Point point1 : pointList) {
             for (Point point2 : pointList) {
-                if (measure.distance(point1, point2) >= minAllowed) {
+                if (measure.distance(point1, point2) < minAllowed) {
                     oldPointList.remove(point1);
                     oldPointList.remove(point2);
                     if (!removedPoints.contains(point1)) {
@@ -27,9 +28,9 @@ public class MyMadSet implements MadSet {
         }
         if (!removedPoints.equals(oldPointList)) {
             pointList = oldPointList;
-            return true; // dane zostały zmodyfikowane
+            return true;
         }
-        return false; // lista nie uległa zmianie
+        return false;
 
     }
 
@@ -37,7 +38,7 @@ public class MyMadSet implements MadSet {
     @Override
     public void setDistanceMeasure(DistanceMeasure measure) throws TooCloseException {
         this.measure = measure;
-        if (changeDetector()) {
+        if (change()) {
             throw new TooCloseException(removedPoints);
         }
     }
@@ -45,29 +46,37 @@ public class MyMadSet implements MadSet {
     @Override
     public void setMinDistanceAllowed(double minAllowed) throws TooCloseException {
         this.minAllowed = minAllowed;
-        if (changeDetector()) {
+        if (change()) {
             throw new TooCloseException(removedPoints);
         }
     }
 
     @Override
     public void addPoint(Point point) throws TooCloseException {
-        List<Point> oldPointList = new ArrayList<>(pointList);
+        removedPoints.clear();
+        List<Point> toAddPointList = new ArrayList<>();
         boolean isValidPoint = true;
         if (!pointList.isEmpty()) {
-            for (Point pointInList : oldPointList) {
+            for (Point pointInList : pointList) {
                 if (measure.distance(pointInList, point) < minAllowed) {
-                    pointList.remove(pointInList);
                     removedPoints.add(pointInList);
                     removedPoints.add(point);
                     isValidPoint = false;
-                } else {
-                    pointList.add(point);
+                    continue;
                 }
+                toAddPointList.add(point);
             }
+
         } else {
-            pointList.add(point);
+            toAddPointList.add(point);
         }
+        toAddPointList.forEach(toAddPoint -> {
+            if (!pointList.contains(toAddPoint)) {
+                pointList.add(toAddPoint);
+            }
+        });
+        removedPoints.forEach(toRemovePoint -> pointList.remove(toRemovePoint));
+
         if (!isValidPoint) {
             throw new TooCloseException(removedPoints);
         }
