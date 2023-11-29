@@ -34,13 +34,13 @@ public class Main {
 
         MyDistanceMeasure measure = new MyDistanceMeasure();
         System.out.println("Kwadrat odległości P(4,3),P(6,5)" + measure.distance(point1, point2));
-        System.out.println("Kwadrat odległości P(4,3),P " + measure.distance(point1, point3));
-        System.out.println("Kwadrat odległości 2,3 " + measure.distance(point2, point3));
+        System.out.println("Kwadrat odległości P(4,3),P(2,4) " + measure.distance(point1, point3));
+        System.out.println("Kwadrat odległości P(6,5),P(2,4) " + measure.distance(point2, point3));
         MyMadSet set1 = new MyMadSet();
 
         Main main = new Main();
         set1.setDistanceMeasure(measure);
-        set1.setMinDistanceAllowed(8);
+        set1.setMinDistanceAllowed(8); //8
 
 
         main.addTry(point1, set1);
@@ -49,8 +49,8 @@ public class Main {
         System.out.println("Lista punktów po operacji: " + set1.getPoints());
         main.addTry(point3, set1);
         System.out.println("Lista punktów po operacji: " + set1.getPoints());
-        main.minAllowedTry(set1, 30);
+        main.minAllowedTry(set1, 2); //30
         System.out.println("Lista punktów po operacji: " + set1.getPoints());
-
+        System.out.println("Posortowane wzgledem P(4,3)" + set1.getSortedPoints(point1));
     }
 }

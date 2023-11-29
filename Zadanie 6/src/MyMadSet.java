@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class MyMadSet implements MadSet {
+class MyMadSet implements MadSet {
 
     private DistanceMeasure measure;
     private double minAllowed;
@@ -14,7 +14,7 @@ public class MyMadSet implements MadSet {
         List<Point> oldPointList = new ArrayList<>(pointList);
         for (Point point1 : pointList) {
             for (Point point2 : pointList) {
-                if (measure.distance(point1, point2) < minAllowed) {
+                if (measure.distance(point1, point2) <= minAllowed && !point1.equals(point2)) {
                     oldPointList.remove(point1);
                     oldPointList.remove(point2);
                     if (!removedPoints.contains(point1)) {
@@ -37,6 +37,7 @@ public class MyMadSet implements MadSet {
 
     @Override
     public void setDistanceMeasure(DistanceMeasure measure) throws TooCloseException {
+        removedPoints.clear();
         this.measure = measure;
         if (change()) {
             throw new TooCloseException(removedPoints);
@@ -45,6 +46,7 @@ public class MyMadSet implements MadSet {
 
     @Override
     public void setMinDistanceAllowed(double minAllowed) throws TooCloseException {
+        removedPoints.clear();
         this.minAllowed = minAllowed;
         if (change()) {
             throw new TooCloseException(removedPoints);
@@ -58,7 +60,7 @@ public class MyMadSet implements MadSet {
         boolean isValidPoint = true;
         if (!pointList.isEmpty()) {
             for (Point pointInList : pointList) {
-                if (measure.distance(pointInList, point) < minAllowed) {
+                if (measure.distance(pointInList, point) <= minAllowed) {
                     removedPoints.add(pointInList);
                     removedPoints.add(point);
                     isValidPoint = false;
