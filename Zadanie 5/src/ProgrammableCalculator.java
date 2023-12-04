@@ -40,7 +40,10 @@ class ProgrammableCalculator implements ProgrammableCalculatorInterface {
         this.fakeNumberLine = convertRealToFakeMap.get(line + "");
         while (programCodeMap.containsKey(this.fakeNumberLine)) {
             String lineInstructionString = programCodeMap.get(this.fakeNumberLine);
-            processCodeLine(lineInstructionString);
+            if (!processCodeLine(lineInstructionString)) {
+                break;
+            }
+            ;
             this.fakeNumberLine++;
         }
     }
@@ -67,7 +70,7 @@ class ProgrammableCalculator implements ProgrammableCalculatorInterface {
     }
 
 
-    private void processCodeLine(String codeLine) {
+    private boolean processCodeLine(String codeLine) {
         // codeLine ma postać "10 Let i = 3"
         String[] dividedCodeLine = codeLine.split(" ", 3);
         //comand = "useLet"
@@ -86,7 +89,8 @@ class ProgrammableCalculator implements ProgrammableCalculatorInterface {
                 useGoto(expresion);
                 break;
             case "END":
-                break;
+                System.out.println("jestem tutaj");
+                return false;
             case "IF":
                 useIf(expresion);
                 break;
@@ -94,6 +98,7 @@ class ProgrammableCalculator implements ProgrammableCalculatorInterface {
                 useInput(expresion);
                 break;
         }
+        return true;
     }
 
     private void useLet(String expression) {
