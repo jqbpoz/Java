@@ -17,6 +17,25 @@ public class Main {
         } catch (TooCloseException e) {
             System.out.println("Wyjątek! zmiany odległosci Lista punktów usuniętych: " + e.removePoints());
         }
+
+    }
+
+    void changeMeasureTry(MyMadSet set, DistanceMeasure measure) {
+        try {
+            set.setDistanceMeasure(measure);
+            System.out.println("Measure zmieniony lista bez zmian");
+        } catch (TooCloseException e) {
+            System.out.println("Wyjątek! MEASURE zmiany odległosci Lista punktów usuniętych: " + e.removePoints());
+        }
+    }
+
+    void changeMeasureTry2(MyMadSet set, DistanceMeasure measure) {
+        try {
+            set.setDistanceMeasure(measure);
+            System.out.println("Measure zmieniony lista bez zmian");
+        } catch (TooCloseException e) {
+            System.out.println("Wyjątek! MEASURE zmiany odległosci Lista punktów usuniętych: " + e.removePoints());
+        }
     }
 
     public static void main(String[] args) throws TooCloseException {
@@ -39,6 +58,7 @@ public class Main {
         MyMadSet set1 = new MyMadSet();
 
         Main main = new Main();
+        main.changeMeasureTry(set1, measure);
         set1.setDistanceMeasure(measure);
         set1.setMinDistanceAllowed(8); //8
 
@@ -52,5 +72,8 @@ public class Main {
         main.minAllowedTry(set1, 2); //30
         System.out.println("Lista punktów po operacji: " + set1.getPoints());
         System.out.println("Posortowane wzgledem P(4,3)" + set1.getSortedPoints(point1));
+
+        System.out.println("Probujemy zmienić measure na TAKI SAM");
+        main.changeMeasureTry2(set1, measure);
     }
 }

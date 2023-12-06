@@ -1,33 +1,32 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 class MyMadSet implements MadSet {
 
-    private DistanceMeasure measure;
-    private double minAllowed;
+    DistanceMeasure measure;
+    double minAllowed;
     List<Point> pointList = new ArrayList<>();
-    List<Point> removedPoints = new ArrayList<>();
+    List<Point> removedPointList = new ArrayList<>();
 
     public boolean change() {
-        removedPoints.clear();
-        List<Point> oldPointList = new ArrayList<>(pointList);
-        for (Point point1 : pointList) {
-            for (Point point2 : pointList) {
-                if (measure.distance(point1, point2) <= minAllowed && !point1.equals(point2)) {
-                    oldPointList.remove(point1);
-                    oldPointList.remove(point2);
-                    if (!removedPoints.contains(point1)) {
-                        removedPoints.add(point1);
+        removedPointList.clear();
+        List<Point> newPointList = new ArrayList<>(pointList);
+        for (Point p1 : pointList) {
+            for (Point p2 : pointList) {
+                if (this.measure.distance(p1, p2) <= minAllowed && !p1.equals(p2)) {
+                    newPointList.remove(p1);
+                    newPointList.remove(p2);
+                    if (!removedPointList.contains(p2)) {
+                        removedPointList.add(p2);
                     }
-                    if (!removedPoints.contains(point2)) {
-                        removedPoints.add(point2);
+                    if (!removedPointList.contains(p1)) {
+                        removedPointList.add(p1);
                     }
                 }
             }
         }
-        if (!removedPoints.equals(oldPointList)) {
-            pointList = oldPointList;
+        if (!pointList.equals(newPointList)) {
+            pointList = newPointList;
             return true;
         }
         return false;
@@ -37,32 +36,32 @@ class MyMadSet implements MadSet {
 
     @Override
     public void setDistanceMeasure(DistanceMeasure measure) throws TooCloseException {
-        removedPoints.clear();
+        removedPointList.clear();
         this.measure = measure;
         if (change()) {
-            throw new TooCloseException(removedPoints);
+            throw new TooCloseException(removedPointList);
         }
     }
 
     @Override
     public void setMinDistanceAllowed(double minAllowed) throws TooCloseException {
-        removedPoints.clear();
+        removedPointList.clear();
         this.minAllowed = minAllowed;
         if (change()) {
-            throw new TooCloseException(removedPoints);
+            throw new TooCloseException(removedPointList);
         }
     }
 
     @Override
     public void addPoint(Point point) throws TooCloseException {
-        removedPoints.clear();
+        removedPointList.clear();
         List<Point> toAddPointList = new ArrayList<>();
         boolean isValidPoint = true;
         if (!pointList.isEmpty()) {
             for (Point pointInList : pointList) {
                 if (measure.distance(pointInList, point) <= minAllowed) {
-                    removedPoints.add(pointInList);
-                    removedPoints.add(point);
+                    removedPointList.add(pointInList);
+                    removedPointList.add(point);
                     isValidPoint = false;
                     continue;
                 }
@@ -77,22 +76,29 @@ class MyMadSet implements MadSet {
                 pointList.add(toAddPoint);
             }
         });
-        removedPoints.forEach(toRemovePoint -> pointList.remove(toRemovePoint));
+
+        removedPointList.forEach(toRemovePoint -> pointList.remove(toRemovePoint));
 
         if (!isValidPoint) {
-            throw new TooCloseException(removedPoints);
+            throw new TooCloseException(removedPointList);
         }
     }
 
     @Override
     public List<Point> getPoints() {
-        return pointList;
+        return this.pointList;
     }
 
     @Override
     public List<Point> getSortedPoints(Point referencePoint) {
-        List<Point> sortedList = new ArrayList<>(pointList);
-        sortedList.sort(Comparator.comparingDouble(point -> measure.distance(point, referencePoint)));
-        return sortedList;
+        List<Point> toSortList = new ArrayList<>(pointList);
+        toSortList.sort(((p1, p2) -> sortingFunction(p1, p2, referencePoint)));
+        return toSortList;
+    }
+
+    public int sortingFunction(Point p1, Point p2, Point referencePoint) {
+        double d1 = measure.distance(p1, referencePoint);
+        double d2 = measure.distance(p2, referencePoint);
+        return Double.compare(d1, d2);
     }
 }
