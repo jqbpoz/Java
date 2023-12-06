@@ -1,24 +1,21 @@
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 
 
-public class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
+class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
 
     final private Map<Integer, Map<Integer, Integer>> wynikiZadan = new HashMap<>(new HashMap<>());
-    ExecutorService fabryka;
+    ExecutorService fab;
 
     @Override
     public void fabrykaWatkow(ExecutorService executorService) {
-        this.fabryka = executorService;
+        this.fab = executorService;
     }
 
-    @Override
-    public int kostkaDoZbadania(KostkaDoGry kostka, int liczbaRzutow) {
-        int id = generatorIdentyfikator(kostka);
+    void wykonajZadanie(KostkaDoGry kostka, int liczbaRzutow, int id) {
         Runnable zadanie = () -> {
-            System.out.println("Rozpoczynam test!!!");
+//            System.out.println("Rozpoczynam test!!!");
             Map<Integer, Integer> badanie = new HashMap<>();
             for (int i = 0; i < liczbaRzutow; i++) {
                 int wynik = kostka.rzut();
@@ -28,19 +25,45 @@ public class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
                     badanie.put(wynik, badanie.get(wynik) + 1);
                 }
             }
-            synchronized (wynikiZadan) {
-                wynikiZadan.put(id, badanie);
-                System.out.println("Skończyłem testowanie");
-            }
+            wstawWynik(id, badanie);
         };
-        fabryka.submit(zadanie);
+        dodajDoKolejki(zadanie);
+    }
+
+    void wstawWynik(int id, Map<Integer, Integer> badanie) {
+        synchronized (wynikiZadan) {
+            wynikiZadan.put(id, badanie);
+//            System.out.println("Skończyłem testowanie");
+        }
+    }
+
+    void dodajDoKolejki(Runnable zadanie) {
+        fab.submit(zadanie);
+    }
+
+    @Override
+    public int kostkaDoZbadania(KostkaDoGry kostka, int liczbaRzutow) {
+        int id = generatorIdentyfikator(kostka);
+        wykonajZadanie(kostka, liczbaRzutow, id);
         return id;
+    }
+
+    boolean prawda() {
+        return true;
+    }
+
+    boolean niePrawda() {
+        return false;
     }
 
     @Override
     public boolean badanieKostkiZakonczono(int identyfikator) {
         synchronized (wynikiZadan) {
-            return wynikiZadan.containsKey(identyfikator);
+            if (wynikiZadan.containsKey(identyfikator)) {
+                return prawda();
+            } else {
+                return niePrawda();
+            }
         }
     }
 
