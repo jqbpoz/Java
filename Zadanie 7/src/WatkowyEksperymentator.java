@@ -6,7 +6,7 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
 
     int limitWatkow;
     ThreadFactory fabryka;
-    private Map<Integer, Map<Integer, Integer>> wynikiZadan = new HashMap<>(new HashMap<>());
+    final private Map<Integer, Map<Integer, Integer>> wynikiZadan = new HashMap<>(new HashMap<>());
     volatile int liczbaKostekAktulanieTestowanych = 0;
 
     @Override
@@ -14,55 +14,45 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
         this.limitWatkow = limitWatkow;
     }
 
-    @Override
+    void wykonajZadanie(KostkaDoGry kostka, int liczbaRzutow, int id) {
+        while (!(liczbaKostekAktulanieTestowanych < limitWatkow)) {
+            synchronized (wynikiZadan) {
+                try {
+                    wynikiZadan.wait();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+        synchronized (wynikiZadan) {
+            this.liczbaKostekAktulanieTestowanych++;
+        }
+        Map<Integer, Integer> badanie = new HashMap<>();
+        for (int i = 0; i < liczbaRzutow; i++) {
+            int wynik = kostka.rzut();
+            if (!badanie.containsKey(wynik)) {
+                badanie.put(wynik, 1);
+            } else {
+                badanie.put(wynik, badanie.get(wynik) + 1);
+            }
 
+        }
+        wstawWynik(id, badanie);
+    }
+
+    void wstawWynik(int id, Map<Integer, Integer> badanie) {
+        synchronized (wynikiZadan) {
+            wynikiZadan.put(id, badanie);
+            wynikiZadan.notifyAll();
+            this.liczbaKostekAktulanieTestowanych--;
+        }
+    }
+
+    @Override
     public int kostkaDoZbadania(KostkaDoGry kostka, int liczbaRzutow) {
         int id = generatorIdentyfikator(kostka);
         Thread watek = fabryka.getThread(() -> {
-                    while (!(liczbaKostekAktulanieTestowanych < limitWatkow)) {
-                        synchronized (wynikiZadan) {
-                            try {
-                                wynikiZadan.wait();
-                            } catch (InterruptedException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                    }
-                    synchronized (wynikiZadan) {
-                        this.liczbaKostekAktulanieTestowanych++;
-                    }
-                    try {
-                        Thread.sleep((long) (Math.random() * 100));
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-                    System.out.println("Rozpoczynam test!!!");
-
-                    try {
-                        Thread.sleep((long) (Math.random() * 10000));
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    }
-
-                    Map<Integer, Integer> badanie = new HashMap<>();
-                    //Czy napewno w ten sposób trzeba zapytać ???
-                    badanie.put(1, 0);
-                    badanie.put(2, 0);
-                    badanie.put(3, 0);
-                    badanie.put(4, 0);
-                    badanie.put(5, 0);
-                    badanie.put(6, 0);
-                    for (int i = 0; i < liczbaRzutow; i++) {
-                        int wynik = kostka.rzut();
-                        badanie.put(wynik, badanie.get(wynik) + 1);
-                    }
-                    synchronized (wynikiZadan) {
-                        wynikiZadan.put(id, badanie);
-                        wynikiZadan.notifyAll();
-                        this.liczbaKostekAktulanieTestowanych--;
-                    }
-                    System.out.println("Skończyłem testowanie");
-
+                    wykonajZadanie(kostka, liczbaRzutow, id);
                 }
         );
         watek.start();
@@ -73,12 +63,15 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
     public void fabrykaWatkow(ThreadFactory fabryka) {
         this.fabryka = fabryka;
     }
-
-
+    
     @Override
     public boolean badanieKostkiZakonczono(int identyfikator) {
         synchronized (wynikiZadan) {
-            return wynikiZadan.containsKey(identyfikator);
+            if (wynikiZadan.containsKey(identyfikator)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
