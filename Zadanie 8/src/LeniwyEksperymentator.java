@@ -48,21 +48,13 @@ class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
         return id;
     }
 
-    boolean prawda() {
-        return true;
-    }
-
-    boolean niePrawda() {
-        return false;
-    }
-
     @Override
     public boolean badanieKostkiZakonczono(int identyfikator) {
         synchronized (wynikiZadan) {
             if (wynikiZadan.containsKey(identyfikator)) {
-                return prawda();
+                return true;
             } else {
-                return niePrawda();
+                return false;
             }
         }
     }
