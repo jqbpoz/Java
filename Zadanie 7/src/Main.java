@@ -9,9 +9,9 @@ public class Main {
 
         eksperymentator.dozwolonaLiczbaDzialajacychWatkow(3);
         eksperymentator.fabrykaWatkow(mojaFabryka);
-        int id1 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
+        int id1 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 2);
         int id2 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
-        int id3 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
+        int id3 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 400);
         int id4 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
         int id5 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
         int id6 = eksperymentator.kostkaDoZbadania(prawdziwaKostka, 40);
@@ -31,6 +31,20 @@ public class Main {
         while (true) {
             if (eksperymentator.badanieKostkiZakonczono(id1)) {
                 System.out.println(eksperymentator.histogram(id1));
+                break;
+            }
+
+        }
+        while (true) {
+            if (eksperymentator.badanieKostkiZakonczono(id2)) {
+                System.out.println(eksperymentator.histogram(id2));
+                break;
+            }
+
+        }
+        while (true) {
+            if (eksperymentator.badanieKostkiZakonczono(id3)) {
+                System.out.println(eksperymentator.histogram(id3));
                 break;
             }
 

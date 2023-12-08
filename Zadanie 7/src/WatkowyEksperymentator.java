@@ -14,7 +14,8 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
         this.limitWatkow = limitWatkow;
     }
 
-    void wykonajZadanie(KostkaDoGry kostka, int liczbaRzutow, int id) {
+    void wykonajZadanie(KostkaDoGry kostka, int liczbaRzutow) {
+        int id = generatorIdentyfikator(Thread.currentThread());
         while (!(liczbaKostekAktulanieTestowanych < limitWatkow)) {
             synchronized (wynikiZadan) {
                 try {
@@ -35,7 +36,6 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
             } else {
                 badanie.put(wynik, badanie.get(wynik) + 1);
             }
-
         }
         wstawWynik(id, badanie);
     }
@@ -50,11 +50,11 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
 
     @Override
     public int kostkaDoZbadania(KostkaDoGry kostka, int liczbaRzutow) {
-        int id = generatorIdentyfikator(kostka);
         Thread watek = fabryka.getThread(() -> {
-                    wykonajZadanie(kostka, liczbaRzutow, id);
+                    wykonajZadanie(kostka, liczbaRzutow);
                 }
         );
+        int id = generatorIdentyfikator(watek);
         watek.start();
         return id;
     }
@@ -63,7 +63,7 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
     public void fabrykaWatkow(ThreadFactory fabryka) {
         this.fabryka = fabryka;
     }
-    
+
     @Override
     public boolean badanieKostkiZakonczono(int identyfikator) {
         synchronized (wynikiZadan) {
@@ -83,7 +83,7 @@ class WatkowyEksperymentator implements BadaczKostekDoGry {
     }
 
 
-    private int generatorIdentyfikator(KostkaDoGry kostka) {
-        return kostka.hashCode();
+    private int generatorIdentyfikator(Thread watek) {
+        return watek.hashCode();
     }
 }
