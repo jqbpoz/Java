@@ -7,6 +7,7 @@ class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
 
     final private Map<Integer, Map<Integer, Integer>> wynikiZadan = new HashMap<>(new HashMap<>());
     ExecutorService fab;
+    int inkrementator = 0;
 
     @Override
     public void fabrykaWatkow(ExecutorService executorService) {
@@ -43,6 +44,7 @@ class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
 
     @Override
     public int kostkaDoZbadania(KostkaDoGry kostka, int liczbaRzutow) {
+        this.inkrementator++;
         int id = generatorIdentyfikator(kostka);
         wykonajZadanie(kostka, liczbaRzutow, id);
         return id;
@@ -67,6 +69,6 @@ class LeniwyEksperymentator implements LeniwyBadaczKostekDoGry {
     }
 
     private int generatorIdentyfikator(KostkaDoGry kostka) {
-        return kostka.hashCode();
+        return kostka.hashCode() + inkrementator;
     }
 }
