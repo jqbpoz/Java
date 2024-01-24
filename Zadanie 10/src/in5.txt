@@ -1,0 +1,4 @@
+10 INPUT licznik
+20 PRINT "PODANO licznik="
+30 PRINT licznik
+40 END

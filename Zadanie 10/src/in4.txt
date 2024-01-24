@@ -1,0 +1,37 @@
+10 LET a = 10
+20 LET b = 20
+30 IF a < b GOTO 50
+40 PRINT "a nie jest < od b"
+45 GOTO 60
+50 PRINT "a < b"
+60 Let c = 20
+70 let b = 10
+80 IF c > b GOTO 110
+90 PRINT "c nie jest > od d"
+100 Goto 120
+110 Print "c > d"
+120 Let e = 30
+130 let f = 30
+140 If e = f Goto 170
+150 print "e != f"
+160 goto 1000
+170 print "e = f"
+1000 LET a = 30
+2000 LET b = 20
+3000 IF a < b GOTO 5000
+4000 PRINT "a nie jest < od b"
+4500 GOTO 6000
+5000 PRINT "a < b"
+6000 Let c = 20
+7000 let b = 30
+8000 IF c > b GOTO 11000
+9000 PRINT "c nie jest > od d"
+10000 Goto 12000
+11000 Print "c > d"
+12000 Let e = 30
+13000 let f = 29
+14000 If e = f Goto 17000
+15000 print "e != f"
+16000 goto 18000
+17000 print "e = f"
+18000 end

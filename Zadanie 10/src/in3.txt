@@ -1,0 +1,6 @@
+10 Print "start"
+11 Print "linia 11 skok do 30"
+12 goto 30
+20 print "XXXXXX"
+30 print "skoczyłem z 12 do 30"
+40 end
