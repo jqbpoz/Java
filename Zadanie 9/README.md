@@ -1,4 +1,5 @@
-<h3>Zadanie 09 termin IV. Do zdobycia maksymalnie: 0,7pkt.</h3><h4>Idea zadania</h4>
+<h3>Zadanie 9</h3>
+<h4>Idea zadania</h4>
 
 <p>
 Program liczący regresję liniową z prostym interfejsem graficznym.
