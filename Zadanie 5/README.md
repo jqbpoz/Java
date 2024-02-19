@@ -3,7 +3,6 @@
 <p>
 Tworzymy prosty, programowalny kalkulator.
 </p>
-
 <h4>Program</h4>
 
 <p>Nasz język programowania ma przypominać BASIC. Czyli, ma być bardzo prosty.
