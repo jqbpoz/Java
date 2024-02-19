@@ -1,7 +1,6 @@
 
 <h3>Zadanie 10</h3>
 <h4>Idea zadania</h4>
-
 <p>
 Tworzymy prosty, programowalny kalkulator. Ciąg dalszy...
 </p>
