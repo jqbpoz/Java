@@ -1,6 +1,5 @@
 <h3>Zadanie 11</h3>
 <h4>Idea zadania</h4>
-
 <p>
 Klient TCP/IP, którego zadaniem jest rozpoznanie czy serwis jest prawdziwy, czy ktoś się za niego podaje.
 </p>
