@@ -1,4 +1,5 @@
-<h3>Zadanie 12 termin III. Do zdobycia maksymalnie: 1pkt.</h3><h4>Idea zadania</h4>
+<h3>Zadanie 12</h3>
+<h4>Idea zadania</h4>
 
 <p>
 Użycie refleksji do dokonania inwentaryzacji klas.
