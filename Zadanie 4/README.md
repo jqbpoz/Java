@@ -4,7 +4,6 @@
 Odszukać wyjście z nieznanego labiryntu. Generalnie: przetrwać!
 Jeśli chodzi o język Java to pojawią się typ wyliczeniowy oraz wyjątki.
 </p>
-
 <h4>Na czym polega problem?</h4>
 
 <p>Rozpoczynamy wędrówkę po nieznanym labiryncie. Labirynt posiada wiele dróg i niebezpiecznych miejsc
